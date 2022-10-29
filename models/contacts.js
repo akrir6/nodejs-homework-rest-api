@@ -35,8 +35,8 @@ const updateContact = async (contactId, body) => {
   const data = await listContacts();
   const index = data.findIndex((c) => c.id === contactId);
   if (index === -1) return null;
-  const contactToUpdate = { id: contactId, ...body };
-  data[index] = { id: contactId, ...body };
+  const contactToUpdate = { ...data[index], ...body };
+  data[index] = contactToUpdate;
   await fs.writeFile(contactsPath, JSON.stringify(data));
   return contactToUpdate;
 };
