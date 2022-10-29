@@ -1,17 +1,13 @@
-const schema = require("./schema");
-const REQ_METHODS = ["POST", "PUT"];
+function validateReqBody(schema) {
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      error.status = 400;
+      next(error);
+    }
 
-const validation = (req, res, next) => {
-  if (!REQ_METHODS.includes(req.method)) return next();
+    next();
+  };
+}
 
-  const { error } = schema.validate(req.body);
-  if (error) {
-    return res.status(400).json({
-      message: error.details[0].message,
-    });
-  }
-
-  return next();
-};
-
-module.exports = validation;
+module.exports = validateReqBody;
