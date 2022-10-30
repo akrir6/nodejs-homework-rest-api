@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
 const {
   schemaPutContact,
   schemaPostContact,
@@ -23,9 +22,8 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", validateReqBody(schemaPostContact), async (req, res, next) => {
-  const newContact = { id: uuidv4(), ...req.body };
-  await contacts.addContact(newContact);
-  res.status(201).json({ result: newContact });
+  const result = await contacts.addContact(req.body);
+  res.status(201).json({ result });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
