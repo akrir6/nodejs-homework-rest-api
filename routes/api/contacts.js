@@ -21,7 +21,7 @@ router.put("/:contactId", validateReqBody(schemaPutContact), ctrl.updateById);
 router.patch(
   "/:contactId/favorite",
   validateReqBody(schemaPatchStatus),
-  ctrl.updateById
+  ctrl.updateStatusById
 );
 
 module.exports = router;

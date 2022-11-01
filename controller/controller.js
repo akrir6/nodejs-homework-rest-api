@@ -1,13 +1,13 @@
-const contacts = require("./../models/contacts");
+const service = require("./../service/service");
 
 const get = async (req, res, next) => {
-  const result = await contacts.listContacts();
+  const result = await service.getAllContacts();
   res.status(200).json({ result });
 };
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
+  const result = await service.getContactById(contactId);
   if (!result) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -15,13 +15,13 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const result = await contacts.addContact(req.body);
+  const result = await service.createContact(req.body);
   res.status(201).json({ result });
 };
 
 const removeById = async (req, res, next) => {
   const { contactId } = req.params;
-  const contactToRemove = await contacts.removeContact(contactId);
+  const contactToRemove = await service.removeContactById(contactId);
   if (!contactToRemove) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -30,7 +30,7 @@ const removeById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   const { contactId } = req.params;
-  const contactToUpdate = await contacts.updateContact(contactId, req.body);
+  const contactToUpdate = await service.updateContactById(contactId, req.body);
   if (!contactToUpdate) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -39,7 +39,7 @@ const updateById = async (req, res, next) => {
 
 const updateStatusById = async (req, res, next) => {
   const { contactId } = req.params;
-  const contactToUpdate = await contacts.updateContact(contactId, req.body);
+  const contactToUpdate = await service.updateStatusById(contactId, req.body);
   if (!contactToUpdate) {
     return res.status(404).json({ message: "Not found" });
   }
