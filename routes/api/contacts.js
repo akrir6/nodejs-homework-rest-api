@@ -3,9 +3,9 @@ const router = express.Router();
 const {
   schemaPutContact,
   schemaPostContact,
-} = require("./../../validation/schema");
+} = require("./../../middlewares/validation/schema");
 const contacts = require("./../../models/contacts");
-const validateReqBody = require("./../../validation/validation");
+const validateReqBody = require("./../../middlewares/validation/validation");
 
 router.get("/", async (req, res, next) => {
   const result = await contacts.listContacts();
