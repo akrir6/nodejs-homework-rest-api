@@ -11,6 +11,7 @@ const schemaPostContact = Joi.object({
   phone: Joi.string()
     .pattern(/^(?:\d{3}|\(\d{3}\))\s\d{3}([-\s])\d{2}\1\d{2}$/)
     .required(),
+  favorite: Joi.boolean(),
 });
 
 const schemaPutContact = Joi.object({
@@ -21,9 +22,15 @@ const schemaPutContact = Joi.object({
   phone: Joi.string().pattern(
     /^(?:\d{3}|\(\d{3}\))\s\d{3}([-\s])\d{2}\1\d{2}$/
   ),
+  favorite: Joi.boolean(),
 }).or("name", "email", "phone");
+
+const schemaPatchStatus = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 module.exports = {
   schemaPostContact,
   schemaPutContact,
+  schemaPatchStatus,
 };
