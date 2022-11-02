@@ -3,49 +3,30 @@ const router = express.Router();
 const {
   schemaPutContact,
   schemaPostContact,
-} = require("./../../validation/schema");
-const contacts = require("./../../models/contacts");
-const validateReqBody = require("./../../validation/validation");
+  schemaPatchStatus,
+} = require("./../../middlewares/validation/schema");
+const ctrl = require("./../../controller/controller");
+const validateReqBody = require("./../../middlewares/validation/validation");
+const asyncWrapper = require("./../../middlewares/asyncWrapper");
 
-router.get("/", async (req, res, next) => {
-  const result = await contacts.listContacts();
-  res.status(200).json({ result });
-});
+router.get("/", asyncWrapper(ctrl.get));
 
-router.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
-  if (!result) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  res.status(200).json({ result });
-});
+router.get("/:contactId", asyncWrapper(ctrl.getById));
 
-router.post("/", validateReqBody(schemaPostContact), async (req, res, next) => {
-  const result = await contacts.addContact(req.body);
-  res.status(201).json({ result });
-});
+router.post("/", validateReqBody(schemaPostContact), asyncWrapper(ctrl.create));
 
-router.delete("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contactToRemove = await contacts.removeContact(contactId);
-  if (!contactToRemove) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  res.status(200).json({ message: "contact deleted" });
-});
+router.delete("/:contactId", asyncWrapper(ctrl.removeById));
 
 router.put(
   "/:contactId",
   validateReqBody(schemaPutContact),
-  async (req, res, next) => {
-    const { contactId } = req.params;
-    const contactToUpdate = await contacts.updateContact(contactId, req.body);
-    if (!contactToUpdate) {
-      return res.status(404).json({ message: "Not found" });
-    }
-    res.status(200).json({ result: contactToUpdate });
-  }
+  asyncWrapper(ctrl.updateById)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validateReqBody(schemaPatchStatus),
+  asyncWrapper(ctrl.updateStatusById)
 );
 
 module.exports = router;
