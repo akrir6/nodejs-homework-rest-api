@@ -7,21 +7,26 @@ const {
 } = require("./../../middlewares/validation/schema");
 const ctrl = require("./../../controller/controller");
 const validateReqBody = require("./../../middlewares/validation/validation");
+const asyncWrapper = require("./../../middlewares/asyncWrapper");
 
-router.get("/", ctrl.get);
+router.get("/", asyncWrapper(ctrl.get));
 
-router.get("/:contactId", ctrl.getById);
+router.get("/:contactId", asyncWrapper(ctrl.getById));
 
-router.post("/", validateReqBody(schemaPostContact), ctrl.create);
+router.post("/", validateReqBody(schemaPostContact), asyncWrapper(ctrl.create));
 
-router.delete("/:contactId", ctrl.removeById);
+router.delete("/:contactId", asyncWrapper(ctrl.removeById));
 
-router.put("/:contactId", validateReqBody(schemaPutContact), ctrl.updateById);
+router.put(
+  "/:contactId",
+  validateReqBody(schemaPutContact),
+  asyncWrapper(ctrl.updateById)
+);
 
 router.patch(
   "/:contactId/favorite",
   validateReqBody(schemaPatchStatus),
-  ctrl.updateStatusById
+  asyncWrapper(ctrl.updateStatusById)
 );
 
 module.exports = router;

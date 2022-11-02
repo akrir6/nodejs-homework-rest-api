@@ -1,20 +1,6 @@
 const Joi = require("joi");
 
-const schemaPostContact = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .pattern(/^[A-Za-z\s.\-']*$/)
-    .required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { deny: ["ru"] } })
-    .required(),
-  phone: Joi.string()
-    .pattern(/^(?:\d{3}|\(\d{3}\))\s\d{3}([-\s])\d{2}\1\d{2}$/)
-    .required(),
-  favorite: Joi.boolean(),
-});
-
-const schemaPutContact = Joi.object({
+const defaultParams = {
   name: Joi.string()
     .min(3)
     .pattern(/^[A-Za-z\s.\-']*$/),
@@ -23,10 +9,27 @@ const schemaPutContact = Joi.object({
     /^(?:\d{3}|\(\d{3}\))\s\d{3}([-\s])\d{2}\1\d{2}$/
   ),
   favorite: Joi.boolean(),
+};
+
+const schemaPostContact = Joi.object({
+  name: defaultParams.name.required(),
+  email: defaultParams.email.required(),
+  phone: defaultParams.phone.required(),
+  favorite: defaultParams.favorite,
+});
+
+const schemaPutContact = Joi.object({
+  name: defaultParams.name,
+  email: defaultParams.email,
+  phone: defaultParams.phone,
+  favorite: defaultParams.favorite,
 }).or("name", "email", "phone");
 
 const schemaPatchStatus = Joi.object({
-  favorite: Joi.boolean().required(),
+  name: defaultParams.name,
+  email: defaultParams.email,
+  phone: defaultParams.phone,
+  favorite: defaultParams.favorite.required(),
 });
 
 module.exports = {
