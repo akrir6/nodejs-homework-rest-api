@@ -32,8 +32,15 @@ const schemaPatchStatus = Joi.object({
   favorite: defaultParams.favorite.required(),
 });
 
+const schemaUserRegister = Joi.object({
+  email: defaultParams.email.required(),
+  password: Joi.string().required(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
+});
+
 module.exports = {
   schemaPostContact,
   schemaPutContact,
   schemaPatchStatus,
+  schemaUserRegister,
 };
