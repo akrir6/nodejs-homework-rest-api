@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const user = new Schema({
   password: {
@@ -18,6 +19,11 @@ const user = new Schema({
   token: String,
 });
 
+user.pre("save", async function () {
+  if (this.isNew) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+});
 const User = model("User", user);
 
 module.exports = User;
