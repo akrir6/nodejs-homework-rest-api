@@ -10,7 +10,9 @@ const validateReqBody = require("./../../middlewares/validation/validation");
 const asyncWrapper = require("./../../middlewares/asyncWrapper");
 const auth = require("./../../middlewares/auth");
 
-router.get("/", auth, asyncWrapper(ctrl.get));
+router.use(auth);
+
+router.get("/", asyncWrapper(ctrl.get));
 
 router.get("/:contactId", asyncWrapper(ctrl.getById));
 

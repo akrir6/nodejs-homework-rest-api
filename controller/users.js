@@ -24,10 +24,32 @@ const login = async (req, res, next) => {
   });
 };
 
-const logout = async (fields) => {};
-const getCurrent = async (fields) => {};
+const logout = async (req, res, next) => {
+  const logoutedUser = await service.logout(req.user.id);
+  if (!logoutedUser) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+  return res.status(204).json();
+};
 
-const updateSubscription = async (id, { subscription }) => {};
+const getCurrent = async (req, res, next) => {
+  const user = await service.getCurrent(req.user.token);
+  if (!user) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+  return res.status(200).json({ user });
+};
+
+const updateSubscription = async (req, res, next) => {
+  const user = await service.updateSubscription(
+    req.user.id,
+    req.body.subscription
+  );
+  if (!user) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+  return res.status(200).json({ user });
+};
 
 module.exports = {
   register,

@@ -25,19 +25,22 @@ const login = async (id) => {
   ).select("-_id email subscription token");
 };
 
-const logout = async (fields) => {
-  return await User.create(fields);
-};
-const getCurrent = async (fields) => {
-  return await User.create(fields);
+const logout = async (id) => {
+  return await User.findByIdAndUpdate(id, { token: null });
 };
 
-const updateSubscription = async (id, { subscription }) => {
-  return await User.findByIdAndUpdate(
+const getCurrent = async (token) => {
+  const { email, subscription } = await User.findOne({ token });
+  return { email, subscription };
+};
+
+const updateSubscription = async (id, newSubscription) => {
+  const { email, subscription } = await User.findByIdAndUpdate(
     id,
-    { subscription },
+    { subscription: newSubscription },
     { returnDocument: "after" }
   );
+  return { email, subscription };
 };
 
 module.exports = {
