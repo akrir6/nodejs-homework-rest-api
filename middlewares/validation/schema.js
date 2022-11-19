@@ -9,6 +9,7 @@ const defaultParams = {
     /^(?:\d{3}|\(\d{3}\))\s\d{3}([-\s])\d{2}\1\d{2}$/
   ),
   favorite: Joi.boolean(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
 };
 
 const schemaPostContact = Joi.object({
@@ -16,6 +17,7 @@ const schemaPostContact = Joi.object({
   email: defaultParams.email.required(),
   phone: defaultParams.phone.required(),
   favorite: defaultParams.favorite,
+  owner: Joi.string(),
 });
 
 const schemaPutContact = Joi.object({
@@ -32,8 +34,20 @@ const schemaPatchStatus = Joi.object({
   favorite: defaultParams.favorite.required(),
 });
 
+const schemaUser = Joi.object({
+  email: defaultParams.email.required(),
+  password: Joi.string().required(),
+  subscription: defaultParams.subscription,
+});
+
+const schemaSubscription = Joi.object({
+  subscription: defaultParams.subscription.required(),
+});
+
 module.exports = {
   schemaPostContact,
   schemaPutContact,
   schemaPatchStatus,
+  schemaUser,
+  schemaSubscription,
 };
