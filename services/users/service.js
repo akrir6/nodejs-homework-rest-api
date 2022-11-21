@@ -47,7 +47,7 @@ const updateAvatar = async (id, url) => {
     id,
     { avatarURL: url },
     { returnDocument: "after" }
-  ).select("-_id avatarURL");
+  ).select("avatarURL");
 };
 
 module.exports = {
