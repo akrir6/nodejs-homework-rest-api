@@ -51,10 +51,19 @@ const updateSubscription = async (req, res, next) => {
   return res.status(200).json({ user });
 };
 
+const updateAvatar = async (req, res, next) => {
+  const user = await service.updateAvatar(req.user.id, req.body.url);
+  if (!user) {
+    return res.status(401).json({ message: "Not authorized" });
+  }
+  return res.status(200).json({ user });
+};
+
 module.exports = {
   register,
   login,
   logout,
   getCurrent,
   updateSubscription,
+  updateAvatar,
 };

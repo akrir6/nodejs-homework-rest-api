@@ -38,6 +38,7 @@ const schemaUser = Joi.object({
   email: defaultParams.email.required(),
   password: Joi.string().required(),
   subscription: defaultParams.subscription,
+  avatarURL: Joi.string(),
 });
 
 const schemaSubscription = Joi.object({

@@ -8,6 +8,7 @@ const ctrl = require("../../controller/users");
 const validateReqBody = require("./../../middlewares/validation/validation");
 const asyncWrapper = require("./../../middlewares/asyncWrapper");
 const auth = require("./../../middlewares/auth");
+const upload = require("./../../middlewares/upload");
 
 router.post(
   "/register",
@@ -26,6 +27,13 @@ router.patch(
   auth,
   validateReqBody(schemaSubscription),
   asyncWrapper(ctrl.updateSubscription)
+);
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  asyncWrapper(ctrl.updateAvatar)
 );
 
 module.exports = router;
