@@ -10,8 +10,8 @@ const getUserByEmail = async (email) => {
 };
 
 const register = async (fields) => {
-  const { email, subscription } = await User.create(fields);
-  return { email, subscription };
+  const { email, subscription, avatarURL } = await User.create(fields);
+  return { email, subscription, avatarURL };
 };
 
 const login = async (id) => {
@@ -35,12 +35,19 @@ const getCurrent = async (token) => {
 };
 
 const updateSubscription = async (id, newSubscription) => {
-  const { email, subscription } = await User.findByIdAndUpdate(
+  return await User.findByIdAndUpdate(
     id,
     { subscription: newSubscription },
     { returnDocument: "after" }
-  );
-  return { email, subscription };
+  ).select("-_id email subscription");
+};
+
+const updateAvatar = async (id, url) => {
+  return await User.findByIdAndUpdate(
+    id,
+    { avatarURL: url },
+    { returnDocument: "after" }
+  ).select("avatarURL");
 };
 
 module.exports = {
@@ -51,4 +58,5 @@ module.exports = {
   logout,
   getCurrent,
   updateSubscription,
+  updateAvatar,
 };

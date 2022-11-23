@@ -1,3 +1,5 @@
+const Jimp = require("jimp");
+const path = require("path");
 const bcrypt = require("bcrypt");
 
 const service = require("../services/users/service");
@@ -51,10 +53,25 @@ const updateSubscription = async (req, res, next) => {
   return res.status(200).json({ user });
 };
 
+const updateAvatar = async (req, res, next) => {
+  const url = path.join(
+    __dirname,
+    "../public/avatars",
+    req.user.id + path.extname(req.file.filename)
+  );
+
+  const img = await Jimp.read(req.file.path);
+  await img.resize(250, 250).write(url);
+
+  const { avatarURL } = await service.updateAvatar(req.user.id, url);
+  return res.status(200).json({ avatarURL });
+};
+
 module.exports = {
   register,
   login,
   logout,
   getCurrent,
   updateSubscription,
+  updateAvatar,
 };
