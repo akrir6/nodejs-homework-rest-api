@@ -39,10 +39,15 @@ const schemaUser = Joi.object({
   password: Joi.string().required(),
   subscription: defaultParams.subscription,
   avatarURL: Joi.string(),
+  verificationToken: Joi.string(),
 });
 
 const schemaSubscription = Joi.object({
   subscription: defaultParams.subscription.required(),
+});
+
+const schemaVerify = Joi.object({
+  email: defaultParams.email.required(),
 });
 
 module.exports = {
@@ -51,4 +56,5 @@ module.exports = {
   schemaPatchStatus,
   schemaUser,
   schemaSubscription,
+  schemaVerify,
 };
