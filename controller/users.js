@@ -1,7 +1,7 @@
 const Jimp = require("jimp");
 const path = require("path");
 const bcrypt = require("bcrypt");
-
+const sendMail = require("../helpers/sendMail");
 const service = require("../services/users/service");
 
 const register = async (req, res, next) => {
@@ -18,6 +18,10 @@ const login = async (req, res, next) => {
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ message: "Email or password is wrong" });
+  }
+
+  if (!user.verify) {
+    return res.status(401).json({ message: "Not verified" });
   }
 
   const loginedUser = await service.login(user.id);
@@ -67,6 +71,29 @@ const updateAvatar = async (req, res, next) => {
   return res.status(200).json({ avatarURL });
 };
 
+const verify = async (req, res, next) => {
+  const user = await service.verify(req.params.verificationToken);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  return res.status(200).json({ message: "Verification successful" });
+};
+
+const reVerify = async (req, res, next) => {
+  const user = await service.getUserByEmail(req.body.email);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  if (user.verify) {
+    return res.status(400).json({
+      message: "Verification has already been passed",
+    });
+  }
+  await sendMail(user.email, user.verificationToken);
+  return res.status(200).json({ message: "Verification email sent" });
+};
+
 module.exports = {
   register,
   login,
@@ -74,4 +101,6 @@ module.exports = {
   getCurrent,
   updateSubscription,
   updateAvatar,
+  verify,
+  reVerify,
 };

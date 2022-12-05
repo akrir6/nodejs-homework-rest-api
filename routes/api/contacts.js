@@ -7,7 +7,7 @@ const {
 } = require("./../../middlewares/validation/schema");
 const ctrl = require("../../controller/contacts");
 const validateReqBody = require("./../../middlewares/validation/validation");
-const asyncWrapper = require("./../../middlewares/asyncWrapper");
+const asyncWrapper = require("./../../helpers/asyncWrapper");
 const auth = require("./../../middlewares/auth");
 
 router.use(auth);

@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const User = require("./schema");
 
 const getUserById = async (id) => {
@@ -50,6 +51,14 @@ const updateAvatar = async (id, url) => {
   ).select("avatarURL");
 };
 
+const verify = async (verificationToken) => {
+  return await User.findOneAndUpdate(
+    { verificationToken },
+    { verificationToken: null, verify: true },
+    { returnDocument: "after" }
+  );
+};
+
 module.exports = {
   getUserById,
   getUserByEmail,
@@ -59,4 +68,5 @@ module.exports = {
   getCurrent,
   updateSubscription,
   updateAvatar,
+  verify,
 };
